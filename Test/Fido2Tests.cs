@@ -1,21 +1,21 @@
-﻿using Fido2NetLib.Objects;
-using Fido2NetLib;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Xunit;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
-using PeterO.Cbor;
+using System.Text;
+using System.Threading.Tasks;
+using Chaos.NaCl;
+using Fido2NetLib;
+using Fido2NetLib.Objects;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Chaos.NaCl;
-using System.Text;
+using Newtonsoft.Json;
+using PeterO.Cbor;
+using Xunit;
 
-namespace fido2_net_lib.Test
+namespace Fido2.Tests
 {
     // todo: Create tests and name Facts and json files better.
     public class Fido2Tests
@@ -72,44 +72,6 @@ namespace fido2_net_lib.Test
         private T Get<T>(string filename)
         {
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(filename));
-        }
-
-        [Fact]
-        public void TestStringIsSerializable()
-        {
-            var x2 = new AuthenticatorSelection();
-            x2.UserVerification = UserVerificationRequirement.Discouraged;
-            var json = JsonConvert.SerializeObject(x2);
-            var c3 = JsonConvert.DeserializeObject<AuthenticatorSelection>(json);
-
-            Assert.Equal(UserVerificationRequirement.Discouraged, c3.UserVerification);
-
-            Assert.NotEqual(UserVerificationRequirement.Required, c3.UserVerification);
-
-            // Assert.True("discouraged" == UserVerificationRequirement.Discouraged);
-            // Assert.False("discouraged" != UserVerificationRequirement.Discouraged);
-
-            Assert.False(UserVerificationRequirement.Required == UserVerificationRequirement.Discouraged);
-            Assert.True(UserVerificationRequirement.Required != UserVerificationRequirement.Discouraged);
-
-            // testing where string and membername mismatch
-
-            var y1 = AuthenticatorAttachment.CrossPlatform;
-            var yjson = JsonConvert.SerializeObject(y1);
-            Assert.Equal("\"cross-platform\"", yjson);
-
-            var y2 = JsonConvert.DeserializeObject<AuthenticatorAttachment>(yjson);
-
-            Assert.Equal(AuthenticatorAttachment.CrossPlatform, y2);
-
-            // test list of typedstrings
-            var z1 = new[] { AuthenticatorTransport.Ble, AuthenticatorTransport.Usb, AuthenticatorTransport.Nfc, AuthenticatorTransport.Lightning, AuthenticatorTransport.Internal };
-            var zjson = JsonConvert.SerializeObject(z1);
-            var z2 = JsonConvert.DeserializeObject<AuthenticatorTransport[]>(zjson);
-
-            Assert.All(z2, (x) => z1.Contains(x));
-            Assert.True(z1.SequenceEqual(z2));
-
         }
 
         [Fact]
@@ -540,7 +502,7 @@ namespace fido2_net_lib.Test
                 UserHandle = userHandle,
             };
 
-            var lib = new Fido2(new Fido2Configuration()
+            var lib = new Fido2NetLib.Fido2(new Fido2Configuration()
             {
                 ServerDomain = rp,
                 ServerName = rp,

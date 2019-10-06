@@ -13,7 +13,7 @@ namespace Fido2NetLib
         /// Its value’s id member specifies the relying party identifier with which the credential should be associated.If omitted, its value will be the CredentialsContainer object’s relevant settings object's origin's effective domain.
         /// </summary>
         [JsonProperty("rp")]
-        public PublicKeyCredentialRpEntity Rp { get; set; }
+        public PublicKeyCredentialRelyingPartyEntity Rp { get; set; }
 
         /// <summary>
         /// This member contains data about the user account for which the Relying Party is requesting attestation. 
@@ -33,7 +33,7 @@ namespace Fido2NetLib
         /// This member contains information about the desired properties of the credential to be created. The sequence is ordered from most preferred to least preferred. The platform makes a best-effort to create the most preferred credential that it can.
         /// </summary>
         [JsonProperty("pubKeyCredParams")]
-        public List<PubKeyCredParam> PubKeyCredParams { get; set; }
+        public List<PublicKeyCredentialsParameters> PubKeyCredParams { get; set; }
 
         /// <summary>
         /// This member specifies a time, in milliseconds, that the caller is willing to wait for the call to complete. This is treated as a hint, and MAY be overridden by the platform.
@@ -72,10 +72,10 @@ namespace Fido2NetLib
                 Status = "ok",
                 ErrorMessage = string.Empty,
                 Challenge = challenge,
-                Rp = new PublicKeyCredentialRpEntity(config.ServerDomain, config.ServerName, config.ServerIcon),
+                Rp = new PublicKeyCredentialRelyingPartyEntity(config.ServerDomain, config.ServerName, config.ServerIcon),
                 Timeout = config.Timeout,
                 User = user,
-                PubKeyCredParams = new List<PubKeyCredParam>()
+                PubKeyCredParams = new List<PublicKeyCredentialsParameters>()
                 {
                     // Add additional as appropriate
                     ES256,
@@ -105,149 +105,52 @@ namespace Fido2NetLib
             return JsonConvert.DeserializeObject<CredentialCreateOptions>(json);
         }
 
-        private static PubKeyCredParam ES256 = new PubKeyCredParam()
+        private static PublicKeyCredentialsParameters ES256 = new PublicKeyCredentialsParameters()
         {
             // External authenticators support the ES256 algorithm
             Type = PublicKeyCredentialType.PublicKey,
             Alg = -7
         };
-        private static PubKeyCredParam ES384 = new PubKeyCredParam()
+        private static PublicKeyCredentialsParameters ES384 = new PublicKeyCredentialsParameters()
         {
             Type = PublicKeyCredentialType.PublicKey,
             Alg = -35
         };
-        private static PubKeyCredParam ES512 = new PubKeyCredParam()
+        private static PublicKeyCredentialsParameters ES512 = new PublicKeyCredentialsParameters()
         {
             Type = PublicKeyCredentialType.PublicKey,
             Alg = -36
         };
-        private static PubKeyCredParam RS256 = new PubKeyCredParam()
+        private static PublicKeyCredentialsParameters RS256 = new PublicKeyCredentialsParameters()
         {
             // Windows Hello supports the RS256 algorithm
             Type = PublicKeyCredentialType.PublicKey,
             Alg = -257
         };
-        private static PubKeyCredParam RS384 = new PubKeyCredParam()
+        private static PublicKeyCredentialsParameters RS384 = new PublicKeyCredentialsParameters()
         {
             Type = PublicKeyCredentialType.PublicKey,
             Alg = -258
         };
-        private static PubKeyCredParam RS512 = new PubKeyCredParam()
+        private static PublicKeyCredentialsParameters RS512 = new PublicKeyCredentialsParameters()
         {
             Type = PublicKeyCredentialType.PublicKey,
             Alg = -259
         };
-        private static PubKeyCredParam PS256 = new PubKeyCredParam()
+        private static PublicKeyCredentialsParameters PS256 = new PublicKeyCredentialsParameters()
         {
             Type = PublicKeyCredentialType.PublicKey,
             Alg = -37
         };
-        private static PubKeyCredParam PS384 = new PubKeyCredParam()
+        private static PublicKeyCredentialsParameters PS384 = new PublicKeyCredentialsParameters()
         {
             Type = PublicKeyCredentialType.PublicKey,
             Alg = -38
         };
-        private static PubKeyCredParam PS512 = new PubKeyCredParam()
+        private static PublicKeyCredentialsParameters PS512 = new PublicKeyCredentialsParameters()
         {
             Type = PublicKeyCredentialType.PublicKey,
             Alg = -39
         };
-    }
-
-    public class PubKeyCredParam
-    {
-        /// <summary>
-        /// The type member specifies the type of credential to be created.
-        /// </summary>
-        [JsonProperty("type")]
-        public PublicKeyCredentialType Type { get; set; }
-
-        /// <summary>
-        /// The alg member specifies the cryptographic signature algorithm with which the newly generated credential will be used, and thus also the type of asymmetric key pair to be generated, e.g., RSA or Elliptic Curve.
-        /// </summary>
-        [JsonProperty("alg")]
-        public long Alg { get; set; }
-    }
-
-    /// <summary>
-    /// PublicKeyCredentialRpEntity 
-    /// </summary>
-    public class PublicKeyCredentialRpEntity
-    {
-        public PublicKeyCredentialRpEntity(string id, string name, string icon)
-        {
-            Name = name;
-            Id = id;
-            Icon = icon;
-        }
-
-        /// <summary>
-        /// A unique identifier for the Relying Party entity, which sets the RP ID.
-        /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// A human-readable name for the entity. Its function depends on what the PublicKeyCredentialEntity represents:
-        /// </summary>
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("icon", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Icon { get; set; }
-    }
-
-    /// <summary>
-    /// WebAuthn Relying Parties may use the AuthenticatorSelectionCriteria dictionary to specify their requirements regarding authenticator attributes.
-    /// </summary>
-    public class AuthenticatorSelection
-    {
-        /// <summary>
-        /// If this member is present, eligible authenticators are filtered to only authenticators attached with the specified §5.4.5 Authenticator Attachment enumeration (enum AuthenticatorAttachment).
-        /// </summary>
-        [JsonProperty("authenticatorAttachment", NullValueHandling = NullValueHandling.Ignore)]
-        public AuthenticatorAttachment? AuthenticatorAttachment { get; set; }
-
-        /// <summary>
-        /// This member describes the Relying Parties' requirements regarding resident credentials. If the parameter is set to true, the authenticator MUST create a client-side-resident public key credential source when creating a public key credential.
-        /// </summary>
-        [JsonProperty("requireResidentKey")]
-        public bool RequireResidentKey { get; set; }
-
-        /// <summary>
-        /// This member describes the Relying Party's requirements regarding user verification for the create() operation. Eligible authenticators are filtered to only those capable of satisfying this requirement.
-        /// </summary>
-        [JsonProperty("userVerification")]
-        public UserVerificationRequirement UserVerification { get; set; }
-
-        public static AuthenticatorSelection Default => new AuthenticatorSelection
-        {
-            AuthenticatorAttachment = null,
-            RequireResidentKey = false,
-            UserVerification = UserVerificationRequirement.Preferred
-        };
-    }
-
-    public class Fido2User
-    {
-
-        /// <summary>
-        /// Required. A human-friendly identifier for a user account. It is intended only for display, i.e., aiding the user in determining the difference between user accounts with similar displayNames. For example, "alexm", "alex.p.mueller@example.com" or "+14255551234". https://w3c.github.io/webauthn/#dictdef-publickeycredentialentity
-        /// </summary>
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// The user handle of the user account entity. To ensure secure operation, authentication and authorization decisions MUST be made on the basis of this id member, not the displayName nor name members
-        /// </summary>
-        [JsonProperty("id")]
-        [JsonConverter(typeof(Base64UrlConverter))]
-        public byte[] Id { get; set; }
-
-        /// <summary>
-        /// A human-friendly name for the user account, intended only for display. For example, "Alex P. Müller" or "田中 倫". The Relying Party SHOULD let the user choose this, and SHOULD NOT restrict the choice more than necessary.
-        /// </summary>
-        [JsonProperty("displayName")]
-        public string DisplayName { get; set; }
     }
 }

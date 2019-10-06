@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Fido2NetLib.Objects;
+﻿using Fido2NetLib.Objects;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 
 namespace Fido2.Tests.Models.Objects
 {
-    public class AuthenticatorTransportTests
+    public class AuthenticatorTransportTests : Fido2TestBase
     {
         [Fact]
         public void IsSerializable()

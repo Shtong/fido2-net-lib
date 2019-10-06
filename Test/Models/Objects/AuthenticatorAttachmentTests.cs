@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Fido2.Tests.Models.Objects
 {
-    public class AuthenticatorAttachmentTests
+    public class AuthenticatorAttachmentTests : Fido2TestBase
     {
         [Fact]
         public void IsSerializable()

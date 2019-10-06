@@ -18,6 +18,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fido2.Models", "Src\Fido2.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fido2.AspNet", "Src\Fido2.AspNet\Fido2.AspNet.csproj", "{C2A9F26D-142C-4A35-982B-72FBDCB7D7FF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{114F2E42-5B94-48CB-96CA-5FF556BCA238}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5EDB4C63-827B-428E-B4A4-94E210D58A56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{671046B3-32C4-4430-A71F-27192EACECD0} = {114F2E42-5B94-48CB-96CA-5FF556BCA238}
+		{1A7DD7B0-255E-44AD-8BE0-5F833846F444} = {114F2E42-5B94-48CB-96CA-5FF556BCA238}
+		{06E82E3F-C626-4070-98BB-6D307DA86AC2} = {5EDB4C63-827B-428E-B4A4-94E210D58A56}
+		{08AA0431-3BBF-49EF-8DEF-5433B3068D92} = {114F2E42-5B94-48CB-96CA-5FF556BCA238}
+		{C2A9F26D-142C-4A35-982B-72FBDCB7D7FF} = {114F2E42-5B94-48CB-96CA-5FF556BCA238}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {538DBEBC-502B-4FFF-B278-5A5D3D290C80}

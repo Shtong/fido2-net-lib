@@ -83,70 +83,18 @@ namespace Fido2.Tests
         public async Task TestPackedAttestationAsync()
         {
             var jsonPost = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(File.ReadAllText("./attestationResultsPacked.json"));
-            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(File.ReadAllText("./attestationOptionsPacked.json"));
             var o = AuthenticatorAttestationResponse.Parse(jsonPost);
-            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
+
             byte[] ad = o.AttestationObject.AuthData;
+
             var authData = new AuthenticatorData(ad);
             Assert.True(authData.ToByteArray().SequenceEqual(ad));
+
             var acdBytes = authData.AttestedCredentialData.ToByteArray();
             var acd = new AttestedCredentialData(acdBytes);
             Assert.True(acd.ToByteArray().SequenceEqual(acdBytes));
         }
-        [Fact]
-        public async Task TestNoneAttestationAsync()
-        {
-            var jsonPost = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(File.ReadAllText("./attestationResultsNone.json"));
-            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(File.ReadAllText("./attestationOptionsNone.json"));
-            var o = AuthenticatorAttestationResponse.Parse(jsonPost);
-            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
-        }
-        [Fact]
-        public async Task TestTPMSHA256AttestationAsync()
-        {
-            var jsonPost = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(File.ReadAllText("./attestationTPMSHA256Response.json"));
-            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(File.ReadAllText("./attestationTPMSHA256Options.json"));
-            var o = AuthenticatorAttestationResponse.Parse(jsonPost);
-            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
-            byte[] ad = o.AttestationObject.AuthData;
-            // TODO : Why read ad ? Is the test finished ?
-        }
-        [Fact]
-        public async Task TestTPMSHA1AttestationAsync()
-        {
-            var jsonPost = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(File.ReadAllText("./attestationTPMSHA1Response.json"));
-            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(File.ReadAllText("./attestationTPMSHA1Options.json"));
-            var o = AuthenticatorAttestationResponse.Parse(jsonPost);
-            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
-            byte[] ad = o.AttestationObject.AuthData;
-            // TODO : Why read ad ? Is the test finished ?
-        }
-        [Fact]
-        public async Task TestAndroidKeyAttestationAsync()
-        {
-            var jsonPost = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(File.ReadAllText("./attestationAndroidKeyResponse.json"));
-            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(File.ReadAllText("./attestationAndroidKeyOptions.json"));
-            var o = AuthenticatorAttestationResponse.Parse(jsonPost);
-            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
-            byte[] ad = o.AttestationObject.AuthData;
-            // TODO : Why read ad ? Is the test finished ?
-        }
-        [Fact]
-        public async Task TaskPackedAttestation512()
-        {
-            var jsonPost = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(File.ReadAllText("./attestationResultsPacked512.json"));
-            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(File.ReadAllText("./attestationOptionsPacked512.json"));
-            var o = AuthenticatorAttestationResponse.Parse(jsonPost);
-            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
-            byte[] ad = o.AttestationObject.AuthData;
-            // TODO : Why read ad ? Is the test finished ?
-        }
-        //public void TestHasCorrentAAguid()
-        //{
-        //    var expectedAaguid = new Uint8Array([
-        //    0x42, 0x38, 0x32, 0x45, 0x44, 0x37, 0x33, 0x43, 0x38, 0x46, 0x42, 0x34, 0x45, 0x35, 0x41, 0x32
-        //]).buffer;
-        //}
+
         [Fact]
         public void TestAttestedCredentialDataES256()
         {

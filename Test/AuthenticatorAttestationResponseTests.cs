@@ -55,6 +55,12 @@ namespace Fido2.Tests
         [InlineData("./options1.json", "./json1.json")]
         [InlineData("./AttestationNoneOptions.json", "./AttestationNoneResponse.json")]
         [InlineData("./attestationOptionsU2F.json", "./attestationResultsU2F.json")]
+        [InlineData("./attestationOptionsPacked.json", "./attestationResultsPacked.json")]
+        [InlineData("./attestationOptionsNone.json", "./attestationResultsNone.json")]
+        [InlineData("./attestationTPMSHA256Options.json", "./attestationTPMSHA256Response.json")]
+        [InlineData("./attestationTPMSHA1Options.json", "./attestationTPMSHA1Response.json")]
+        [InlineData("./attestationAndroidKeyOptions.json", "./attestationAndroidKeyResponse.json")]
+        [InlineData("./attestationOptionsPacked512.json", "./attestationResultsPacked512.json")]
         public async Task Verify(string optionsFile, string responseFile)
         {
             var options = ReadTestDataFromFile<CredentialCreateOptions>(optionsFile);

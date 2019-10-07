@@ -96,56 +96,13 @@ namespace Fido2.Tests
         }
 
         [Fact]
-        public void TestAttestedCredentialDataES256()
-        {
-            var aaguid = new Guid("F1D0F1D0-F1D0-F1D0-F1D0-F1D0F1D0F1D0");
-            var credentialID = new byte[] { 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, };
-            var ecdsa = MakeECDsa(COSE.Algorithm.ES256, COSE.EllipticCurve.P256);
-            var ecparams = ecdsa.ExportParameters(true);
-            var cpk = MakeCredentialPublicKey(COSE.KeyType.EC2, COSE.Algorithm.ES256, COSE.EllipticCurve.P256, ecparams.Q.X, ecparams.Q.Y);
-
-            var acdFromConst = new AttestedCredentialData(aaguid, credentialID, cpk);
-            var acdBytes = acdFromConst.ToByteArray();
-            var acdFromBytes = new AttestedCredentialData(acdBytes);
-            Assert.True(acdFromBytes.ToByteArray().SequenceEqual(acdFromConst.ToByteArray()));
-        }
-
-        [Fact]
-        public void TestAttestedCredentialDataRSA()
-        {
-            var aaguid = new Guid("F1D0F1D0-F1D0-F1D0-F1D0-F1D0F1D0F1D0");
-            var credentialID = new byte[] { 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, };
-            var rsa = new RSACng();
-            var rsaparams = rsa.ExportParameters(true);
-            var cpk = MakeCredentialPublicKey(COSE.KeyType.RSA, COSE.Algorithm.RS256, rsaparams.Modulus, rsaparams.Exponent);
-
-            var acdFromConst = new AttestedCredentialData(aaguid, credentialID, cpk);
-            var acdBytes = acdFromConst.ToByteArray();
-            var acdFromBytes = new AttestedCredentialData(acdBytes);
-            Assert.True(acdFromBytes.ToByteArray().SequenceEqual(acdFromConst.ToByteArray()));
-        }
-
-        [Fact]
-        public void TestAttestedCredentialDataOKP()
-        {
-            var aaguid = new Guid("F1D0F1D0-F1D0-F1D0-F1D0-F1D0F1D0F1D0");
-            var credentialID = new byte[] { 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, };
-            MakeEdDSA(out _, out var publicKey, out _);
-            var cpk = MakeCredentialPublicKey(COSE.KeyType.OKP, COSE.Algorithm.EdDSA, COSE.EllipticCurve.Ed25519, publicKey);
-
-            var acdFromConst = new AttestedCredentialData(aaguid, credentialID, cpk);
-            var acdBytes = acdFromConst.ToByteArray();
-            var acdFromBytes = new AttestedCredentialData(acdBytes);
-            Assert.True(acdFromBytes.ToByteArray().SequenceEqual(acdFromConst.ToByteArray()));
-        }
-
-        [Fact]
         public void TestAuthenticatorData()
         {
             byte[] rpId = Encoding.UTF8.GetBytes("fido2.azurewebsites.net/");
             var rpIdHash = SHA256.Create().ComputeHash(rpId);
             var flags = AuthenticatorFlags.AT | AuthenticatorFlags.ED | AuthenticatorFlags.UP | AuthenticatorFlags.UV;
             const ushort signCount = 0xf1d0;
+
             var aaguid = new Guid("F1D0F1D0-F1D0-F1D0-F1D0-F1D0F1D0F1D0");
             var credentialID = new byte[] { 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, };
             var ecdsa = MakeECDsa(COSE.Algorithm.ES256, COSE.EllipticCurve.P256);
@@ -385,7 +342,9 @@ namespace Fido2.Tests
             {
                 return Task.FromResult(true);
             };
-            var res = await lib.MakeAssertionAsync(response, options, cpk.GetBytes(), signCount - 1, callback);
+
+            // This should not throw an exception
+            await lib.MakeAssertionAsync(response, options, cpk.GetBytes(), signCount - 1, callback);
         }
 
         internal void MakeEdDSA(out byte[] privateKeySeed, out byte[] publicKey, out byte[] expandedPrivateKey)

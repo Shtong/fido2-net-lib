@@ -95,32 +95,6 @@ namespace Fido2.Tests
             Assert.True(acd.ToByteArray().SequenceEqual(acdBytes));
         }
 
-        [Fact]
-        public void TestAuthenticatorData()
-        {
-            byte[] rpId = Encoding.UTF8.GetBytes("fido2.azurewebsites.net/");
-            var rpIdHash = SHA256.Create().ComputeHash(rpId);
-            var flags = AuthenticatorFlags.AT | AuthenticatorFlags.ED | AuthenticatorFlags.UP | AuthenticatorFlags.UV;
-            const ushort signCount = 0xf1d0;
-
-            var aaguid = new Guid("F1D0F1D0-F1D0-F1D0-F1D0-F1D0F1D0F1D0");
-            var credentialID = new byte[] { 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, 0xf1, 0xd0, };
-            var ecdsa = MakeECDsa(COSE.Algorithm.ES256, COSE.EllipticCurve.P256);
-            var ecparams = ecdsa.ExportParameters(true);
-            var cpk = MakeCredentialPublicKey(COSE.KeyType.EC2, COSE.Algorithm.ES256, COSE.EllipticCurve.P256, ecparams.Q.X, ecparams.Q.Y);
-
-            var acd = new AttestedCredentialData(aaguid, credentialID, cpk);
-            var extBytes = CBORObject.NewMap().Add("testing", true).EncodeToBytes();
-            var exts = new Extensions(extBytes);
-
-            var ad = new AuthenticatorData(rpIdHash, flags, signCount, acd, exts);
-            Assert.True(ad.RpIdHash.SequenceEqual(rpIdHash));
-            Assert.True(ad.HasAttestedCredentialData | ad.UserPresent | ad.UserVerified | ad.HasExtensionsData);
-            Assert.True(ad.SignCount == signCount);
-            Assert.True(ad.AttestedCredentialData.ToByteArray().SequenceEqual(acd.ToByteArray()));
-            Assert.True(ad.Extensions.GetBytes().SequenceEqual(extBytes));
-        }
-
         internal static byte[] SetEcDsaSigValue(byte[] sig)
         {
             var start = Array.FindIndex(sig, b => b != 0);

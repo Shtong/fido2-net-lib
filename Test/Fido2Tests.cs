@@ -70,35 +70,6 @@ namespace Fido2.Tests
         }
 
         [Fact]
-        public void MetadataTOCPayloadEntry_Can_Be_JSON_Roundtripped()
-        {
-            var input = new MetadataTOCPayloadEntry()
-            {
-                AaGuid = Guid.NewGuid().ToString(),
-                MetadataStatement = new MetadataStatement(),
-                StatusReports = Array.Empty<StatusReport>(),
-                TimeOfLastStatusChange = DateTime.UtcNow.ToString("o")
-            };
-
-            input.MetadataStatement.AaGuid = Guid.NewGuid().ToString();
-            input.MetadataStatement.Description = "Test entry";
-            input.MetadataStatement.AuthenticatorVersion = 1;
-            input.MetadataStatement.AssertionScheme = "abc123";
-            input.MetadataStatement.AuthenticationAlgorithm = 1;
-            input.MetadataStatement.Upv = new Version[] { new Version("1.0.0.0") };
-            input.MetadataStatement.AttestationTypes = new ushort[] { 1 };
-            input.MetadataStatement.UserVerificationDetails = Array.Empty<VerificationMethodDescriptor[]>();
-            input.MetadataStatement.AttestationRootCertificates = new string[] { "..." };
-
-            var json = JsonConvert.SerializeObject(input);
-
-            var output = JsonConvert.DeserializeObject<MetadataTOCPayloadEntry>(json);
-
-            Assert.Equal(input.AaGuid, output.AaGuid);
-
-        }
-
-        [Fact]
         public void TestAuthenticatorDataPa2rsing()
         {
             var bs = new byte[] { 1, 2, 3 };

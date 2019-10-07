@@ -52,11 +52,22 @@ namespace Fido2.Tests
         }
 
         [Fact]
-        public async Task BasicVerify()
+        public async Task VerifyBasic()
         {
-            var jsonPost = ReadTestDataFromFile<AuthenticatorAttestationRawResponse>("./json1.json");
             var options = ReadTestDataFromFile<CredentialCreateOptions>("./options1.json");
-            var o = AuthenticatorAttestationResponse.Parse(jsonPost);
+            var response = ReadTestDataFromFile<AuthenticatorAttestationRawResponse>("./json1.json");
+            var o = AuthenticatorAttestationResponse.Parse(response);
+
+            // This should not throw an exception
+            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
+        }
+
+        [Fact]
+        public async Task VerifyAttestationNone()
+        {
+            var options = ReadTestDataFromFile<CredentialCreateOptions>("./AttestationNoneOptions.json");
+            var response = ReadTestDataFromFile<AuthenticatorAttestationRawResponse>("./AttestationNoneResponse.json");
+            var o = AuthenticatorAttestationResponse.Parse(response);
 
             // This should not throw an exception
             await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);

@@ -39,7 +39,7 @@ namespace Fido2.Tests
             var services = new ServiceCollection();
             services.AddDistributedMemoryCache();
             services.AddLogging();
-            var serviceProvider = services.BuildServiceProvider();
+            ServiceProvider serviceProvider = services.BuildServiceProvider();
 
             var result = new DistributedCacheMetadataService(
                 repos,
@@ -51,26 +51,18 @@ namespace Fido2.Tests
             return result;
         }
 
-        [Fact]
-        public async Task VerifyBasic()
+        [Theory]
+        [InlineData("./options1.json", "./json1.json")]
+        [InlineData("./AttestationNoneOptions.json", "./AttestationNoneResponse.json")]
+        [InlineData("./attestationOptionsU2F.json", "./attestationResultsU2F.json")]
+        public async Task Verify(string optionsFile, string responseFile)
         {
-            var options = ReadTestDataFromFile<CredentialCreateOptions>("./options1.json");
-            var response = ReadTestDataFromFile<AuthenticatorAttestationRawResponse>("./json1.json");
-            var o = AuthenticatorAttestationResponse.Parse(response);
+            var options = ReadTestDataFromFile<CredentialCreateOptions>(optionsFile);
+            var response = ReadTestDataFromFile<AuthenticatorAttestationRawResponse>(responseFile);
+            var parsed = AuthenticatorAttestationResponse.Parse(response);
 
             // This should not throw an exception
-            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
-        }
-
-        [Fact]
-        public async Task VerifyAttestationNone()
-        {
-            var options = ReadTestDataFromFile<CredentialCreateOptions>("./AttestationNoneOptions.json");
-            var response = ReadTestDataFromFile<AuthenticatorAttestationRawResponse>("./AttestationNoneResponse.json");
-            var o = AuthenticatorAttestationResponse.Parse(response);
-
-            // This should not throw an exception
-            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
+            await parsed.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
         }
     }
 }

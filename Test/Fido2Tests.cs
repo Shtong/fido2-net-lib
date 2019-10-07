@@ -80,16 +80,6 @@ namespace Fido2.Tests
         }
 
         [Fact]
-        public async Task TestU2FAttestationAsync()
-        {
-            var jsonPost = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(File.ReadAllText("./attestationResultsU2F.json"));
-            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(File.ReadAllText("./attestationOptionsU2F.json"));
-            var o = AuthenticatorAttestationResponse.Parse(jsonPost);
-            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
-            byte[] ad = o.AttestationObject.AuthData;
-            // TODO : Why read ad ? Is the test finished ?
-        }
-        [Fact]
         public async Task TestPackedAttestationAsync()
         {
             var jsonPost = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(File.ReadAllText("./attestationResultsPacked.json"));

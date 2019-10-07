@@ -70,18 +70,6 @@ namespace Fido2.Tests
         }
 
         [Fact]
-        public async Task TestParsingAsync()
-        {
-            var jsonPost = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(File.ReadAllText("./json1.json"));
-            var options = JsonConvert.DeserializeObject<CredentialCreateOptions>(File.ReadAllText("./options1.json"));
-
-            Assert.NotNull(jsonPost);
-
-            var o = AuthenticatorAttestationResponse.Parse(jsonPost);
-            await o.VerifyAsync(options, _config, (x) => Task.FromResult(true), _metadataService, null);
-        }
-
-        [Fact]
         public void MetadataTOCPayloadEntry_Can_Be_JSON_Roundtripped()
         {
             var input = new MetadataTOCPayloadEntry()

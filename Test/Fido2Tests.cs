@@ -79,22 +79,6 @@ namespace Fido2.Tests
             Assert.Equal(s, bs);
         }
 
-        [Fact]
-        public async Task TestPackedAttestationAsync()
-        {
-            var jsonPost = JsonConvert.DeserializeObject<AuthenticatorAttestationRawResponse>(File.ReadAllText("./attestationResultsPacked.json"));
-            var o = AuthenticatorAttestationResponse.Parse(jsonPost);
-
-            byte[] ad = o.AttestationObject.AuthData;
-
-            var authData = new AuthenticatorData(ad);
-            Assert.True(authData.ToByteArray().SequenceEqual(ad));
-
-            var acdBytes = authData.AttestedCredentialData.ToByteArray();
-            var acd = new AttestedCredentialData(acdBytes);
-            Assert.True(acd.ToByteArray().SequenceEqual(acdBytes));
-        }
-
         internal static byte[] SetEcDsaSigValue(byte[] sig)
         {
             var start = Array.FindIndex(sig, b => b != 0);

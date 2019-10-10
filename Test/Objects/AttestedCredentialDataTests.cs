@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using Chaos.NaCl;
+using Fido2NetLib;
 using Fido2NetLib.Objects;
 using PeterO.Cbor;
 using Shouldly;
@@ -51,6 +52,22 @@ namespace Fido2.Tests.Objects
                 publicKey);
 
             VerifyCredentialData(cpk);
+        }
+
+        [Fact]
+        public void PackedRawDataToAttestedCredential()
+        {
+            var rawData = ReadTestDataFromFile<AuthenticatorAttestationRawResponse>("./attestationResultsPacked.json");
+            var response = AuthenticatorAttestationResponse.Parse(rawData);
+
+            byte[] authDataBytes = response.AttestationObject.AuthData;
+
+            var authData = new AuthenticatorData(authDataBytes);
+            authData.ToByteArray().ShouldBe(authDataBytes);
+
+            var attestedCredentialBytes = authData.AttestedCredentialData.ToByteArray();
+            var attestedCredential = new AttestedCredentialData(attestedCredentialBytes);
+            attestedCredential.ToByteArray().ShouldBe(attestedCredentialBytes);
         }
 
         private void VerifyCredentialData(CredentialPublicKey credentialPublicKey)

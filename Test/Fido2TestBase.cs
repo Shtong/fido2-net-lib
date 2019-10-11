@@ -159,5 +159,19 @@ namespace Fido2.Tests
             return new CredentialPublicKey(cpk);
         }
 
+        /// <summary>
+        /// Creates a byte array of the specified size and fills it with random values
+        /// </summary>
+        /// <param name="size">Size of the array</param>
+        /// <returns>A byte array with random values</returns>
+        protected static byte[] CreateRandomBytes(int size)
+        {
+            using(var rng = RandomNumberGenerator.Create())
+            {
+                byte[] result = new byte[size];
+                rng.GetBytes(result);
+                return result;
+            }
+        }
     }
 }

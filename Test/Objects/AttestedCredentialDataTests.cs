@@ -1,9 +1,7 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using Chaos.NaCl;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
-using PeterO.Cbor;
 using Shouldly;
 using Xunit;
 
@@ -45,7 +43,7 @@ namespace Fido2.Tests.Objects
         [Fact]
         public void GeneratesCorrectDataWithOKP()
         {
-            MakeEdDSA(out _, out var publicKey, out _);
+            MakeEdDSA(out var publicKey);
             CredentialPublicKey cpk = MakeCredentialPublicKey(
                 COSE.Algorithm.EdDSA,
                 COSE.EllipticCurve.Ed25519,
@@ -79,16 +77,10 @@ namespace Fido2.Tests.Objects
             acdFromBytes.ToByteArray().ShouldBe(acdFromConst.ToByteArray());
         }
 
-        private void MakeEdDSA(out byte[] privateKeySeed, out byte[] publicKey, out byte[] expandedPrivateKey)
+        private void MakeEdDSA(out byte[] publicKey)
         {
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                privateKeySeed = new byte[32];
-                rng.GetBytes(privateKeySeed);
-                publicKey = new byte[32];
-                expandedPrivateKey = new byte[64];
-                Ed25519.KeyPairFromSeed(out publicKey, out expandedPrivateKey, privateKeySeed);
-            }
+            byte[] privateKeySeed = CreateRandomBytes(32);
+            Ed25519.KeyPairFromSeed(out publicKey, out _, privateKeySeed);
         }
     }
 }

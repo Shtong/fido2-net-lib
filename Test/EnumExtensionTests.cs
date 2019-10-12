@@ -37,7 +37,7 @@ namespace Fido2
         public void TestToEnumWithIgnoringCase(string value, bool ignoreCase, bool shouldThrow)
         {
 
-            var exception = Record.Exception(() => value.ToEnum<AttestationConveyancePreference>(ignoreCase));
+            Exception exception = Record.Exception(() => value.ToEnum<AttestationConveyancePreference>(ignoreCase));
 
             if (shouldThrow)
             {
@@ -60,7 +60,7 @@ namespace Fido2
         [InlineData("cRoss-PlatfoRm", false, true)] // invalid
         public void TestToEnumWithDashes(string value, bool ignoreCase, bool shouldThrow)
         {
-            var exception = Record.Exception(() => value.ToEnum<AuthenticatorAttachment>(ignoreCase));
+            Exception exception = Record.Exception(() => value.ToEnum<AuthenticatorAttachment>(ignoreCase));
 
             if (shouldThrow)
             {

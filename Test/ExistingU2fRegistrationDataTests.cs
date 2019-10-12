@@ -19,7 +19,7 @@ namespace Fido2
             var publicKeyData = Base64Url.Decode("BEKJkJiDzo8wlrYbAHmyz5a5vShbkStO58ZO7F-hy4fvBp6TowCZoV2dNGcxIN1yT18799bb_WuP0Yq_DSv5a-U");
 
             //key as cbor
-            var publicKey = CreatePublicKeyFromU2fRegistrationData(keyHandleData, publicKeyData);
+            CBORObject publicKey = CreatePublicKeyFromU2fRegistrationData(publicKeyData);
 
             var options = new AssertionOptions
             {
@@ -61,13 +61,14 @@ namespace Fido2
                 Origin = "https://localhost:44336" //data was generated with this origin
             });
 
-            var res = await fido2.MakeAssertionAsync(authResponse, options, publicKey.EncodeToBytes(), 0, null);
+            AssertionVerificationResult res = 
+                await fido2.MakeAssertionAsync(authResponse, options, publicKey.EncodeToBytes(), 0, null);
 
             Assert.Equal("ok", res.Status);
 
         }
 
-        public static CBORObject CreatePublicKeyFromU2fRegistrationData(byte[] keyHandleData, byte[] publicKeyData)
+        private static CBORObject CreatePublicKeyFromU2fRegistrationData(byte[] publicKeyData)
         {
             using (var publicKey = new ECDsaCng(ConvertPublicKey(publicKeyData)))
             {
@@ -76,7 +77,7 @@ namespace Fido2
                 coseKey.Add(COSE.KeyCommonParameter.KeyType, COSE.KeyType.EC2);
                 coseKey.Add(COSE.KeyCommonParameter.Alg, -7);
 
-                var keyParams = publicKey.ExportParameters(false);
+                ECParameters keyParams = publicKey.ExportParameters(false);
 
                 if (keyParams.Curve.Oid.FriendlyName.Equals(ECCurve.NamedCurves.nistP256.Oid.FriendlyName))
                     coseKey.Add(COSE.KeyTypeParameter.Crv, COSE.EllipticCurve.P256);
@@ -96,7 +97,7 @@ namespace Fido2
             var eccPublicKeyBlob = new byte[72];
             Array.Copy(header, 0, eccPublicKeyBlob, 0, 8);
             Array.Copy(rawData, 1, eccPublicKeyBlob, 8, 64);
-            CngKey key = CngKey.Import(eccPublicKeyBlob, CngKeyBlobFormat.EccPublicBlob);
+            var key = CngKey.Import(eccPublicKeyBlob, CngKeyBlobFormat.EccPublicBlob);
             return key;
         }
     }

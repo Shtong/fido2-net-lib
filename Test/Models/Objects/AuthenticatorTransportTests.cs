@@ -10,7 +10,7 @@ namespace Fido2.Models.Objects
         [Fact]
         public void IsSerializable()
         {
-            var list = new[]
+            AuthenticatorTransport[] list = new[]
 {
                 AuthenticatorTransport.Ble,
                 AuthenticatorTransport.Usb,
@@ -20,7 +20,7 @@ namespace Fido2.Models.Objects
             };
 
             var serialized = JsonConvert.SerializeObject(list);
-            var deserialized = JsonConvert.DeserializeObject<AuthenticatorTransport[]>(serialized);
+            AuthenticatorTransport[] deserialized = JsonConvert.DeserializeObject<AuthenticatorTransport[]>(serialized);
 
             deserialized.ShouldBe(list);
         }

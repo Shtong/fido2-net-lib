@@ -37,7 +37,7 @@ namespace Fido2.Models.Metadata
             };
 
             var serialized = JsonConvert.SerializeObject(input);
-            var deserialized = JsonConvert.DeserializeObject<MetadataTOCPayloadEntry>(serialized);
+            MetadataTOCPayloadEntry deserialized = JsonConvert.DeserializeObject<MetadataTOCPayloadEntry>(serialized);
 
             deserialized.AaGuid.ShouldBe(input.AaGuid);
         }

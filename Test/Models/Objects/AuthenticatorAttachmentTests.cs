@@ -10,9 +10,9 @@ namespace Fido2.Models.Objects
         [Fact]
         public void IsSerializable()
         {
-            var value = AuthenticatorAttachment.CrossPlatform;
-            var serialized = JsonConvert.SerializeObject(value);
-            var deserialized = JsonConvert.DeserializeObject<AuthenticatorAttachment>(serialized);
+            AuthenticatorAttachment value = AuthenticatorAttachment.CrossPlatform;
+            string serialized = JsonConvert.SerializeObject(value);
+            AuthenticatorAttachment deserialized = JsonConvert.DeserializeObject<AuthenticatorAttachment>(serialized);
 
             serialized.ShouldBe("\"cross-platform\"");
             deserialized.ShouldBe(AuthenticatorAttachment.CrossPlatform);

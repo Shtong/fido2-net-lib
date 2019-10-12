@@ -22,14 +22,17 @@ namespace Fido2.Objects
                 rpIdHash = sha.ComputeHash(Encoding.UTF8.GetBytes("fido2.azurewebsites.net/"));
             }
 
-            ECDsaCng ecdsa = MakeECDsa(COSE.Algorithm.ES256, COSE.EllipticCurve.P256);
-            ECParameters ecparams = ecdsa.ExportParameters(true);
-            CredentialPublicKey cpk = MakeCredentialPublicKey(
-                COSE.Algorithm.ES256,
-                COSE.EllipticCurve.P256,
-                ecparams.Q.X,
-                ecparams.Q.Y);
-            var acd = new AttestedCredentialData(_aaGuid, _credentialId, cpk);
+            AttestedCredentialData acd;
+            using (ECDsaCng ecdsa = MakeECDsa(COSE.Algorithm.ES256, COSE.EllipticCurve.P256))
+            {
+                ECParameters ecparams = ecdsa.ExportParameters(true);
+                CredentialPublicKey cpk = MakeCredentialPublicKey(
+                    COSE.Algorithm.ES256,
+                    COSE.EllipticCurve.P256,
+                    ecparams.Q.X,
+                    ecparams.Q.Y);
+                acd = new AttestedCredentialData(_aaGuid, _credentialId, cpk);
+            }
 
             var extBytes = CBORObject.NewMap().Add("testing", true).EncodeToBytes();
             var exts = new Extensions(extBytes);

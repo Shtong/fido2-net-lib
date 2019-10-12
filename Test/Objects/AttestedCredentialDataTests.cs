@@ -55,7 +55,8 @@ namespace Fido2.Objects
         [Fact]
         public void PackedRawDataToAttestedCredential()
         {
-            var rawData = ReadTestDataFromFile<AuthenticatorAttestationRawResponse>("./attestationResultsPacked.json");
+            AuthenticatorAttestationRawResponse rawData = 
+                ReadTestDataFromFile<AuthenticatorAttestationRawResponse>("./attestationResultsPacked.json");
             var response = AuthenticatorAttestationResponse.Parse(rawData);
 
             byte[] authDataBytes = response.AttestationObject.AuthData;

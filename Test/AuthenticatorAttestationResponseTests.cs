@@ -63,8 +63,9 @@ namespace Fido2
         [InlineData("./attestationOptionsPacked512.json", "./attestationResultsPacked512.json")]
         public async Task Verify(string optionsFile, string responseFile)
         {
-            var options = ReadTestDataFromFile<CredentialCreateOptions>(optionsFile);
-            var response = ReadTestDataFromFile<AuthenticatorAttestationRawResponse>(responseFile);
+            CredentialCreateOptions options = ReadTestDataFromFile<CredentialCreateOptions>(optionsFile);
+            AuthenticatorAttestationRawResponse response = 
+                ReadTestDataFromFile<AuthenticatorAttestationRawResponse>(responseFile);
             var parsed = AuthenticatorAttestationResponse.Parse(response);
 
             // This should not throw an exception

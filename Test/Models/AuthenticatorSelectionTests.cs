@@ -16,7 +16,7 @@ namespace Fido2.Models
                 UserVerification = UserVerificationRequirement.Discouraged
             };
             var serialized = JsonConvert.SerializeObject(subject);
-            var deserialized = JsonConvert.DeserializeObject<AuthenticatorSelection>(serialized);
+            AuthenticatorSelection deserialized = JsonConvert.DeserializeObject<AuthenticatorSelection>(serialized);
 
             deserialized.UserVerification.ShouldBe(UserVerificationRequirement.Discouraged);
         }

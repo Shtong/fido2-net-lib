@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using Fido2NetLib;
+using Shouldly;
 using Xunit;
 
 namespace Fido2
 {
     public class Base64UrlTests
     {
-    
         [Theory]
         [MemberData(nameof(GetData))]
         public void EncodeAndDecodeResultsAreEqual(byte[] data)
@@ -18,40 +18,31 @@ namespace Fido2
             var decodedBytes = Base64Url.Decode(encodedBytes);
 
             // Assert
-            Assert.Equal(data, decodedBytes);
-        }           
+            decodedBytes.ShouldBe(data);
+        }
 
         [Fact]
         public void EncodeThrowsOnNull()
         {
-            Assert.Throws<ArgumentNullException>(() =>
+            Should.Throw<ArgumentNullException>(() =>
             {
-                var encodedBytes = Base64Url.Encode(null);
+                Base64Url.Encode(null);
             });
         }
 
         [Fact]
         public void DecodeThrowsOnNull()
         {
-            Assert.Throws<ArgumentNullException>(() =>
+            Should.Throw<ArgumentNullException>(() =>
             {
-                var encodedBytes = Base64Url.Decode(null);
+                Base64Url.Decode(null);
             });
         }
 
         public static IEnumerable<object[]> GetData()
         {
-            return new TestDataGenerator();
-        }
-
-
-        private class TestDataGenerator : TheoryData<byte[]>
-        {
-            public TestDataGenerator()
-            {
-                Add(Encoding.UTF8.GetBytes("This is a string fragment to test Base64Url encoding & decoding."));
-                Add(Array.Empty<byte>());
-            }
+            yield return new[] { Encoding.UTF8.GetBytes("This is a string fragment to test Base64Url encoding & decoding.") };
+            yield return new[] { Array.Empty<byte>() };
         }
     }
 }

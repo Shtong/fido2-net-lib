@@ -5,6 +5,7 @@ using Fido2NetLib;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Shouldly;
 using Xunit;
 
 namespace Fido2
@@ -16,31 +17,25 @@ namespace Fido2
         public async Task ConformanceTestClient()
         {
             var client = new ConformanceMetadataRepository(null, "http://localhost");
-
             MetadataTOCPayload toc = await client.GetToc();
-
-            Assert.True(toc.Entries.Length > 0);
 
             MetadataStatement statement = await client.GetMetadataStatement(toc.Entries[toc.Entries.Length - 1]);
 
-            Assert.NotNull(statement.Description);
+            toc.Entries.Length.ShouldBeGreaterThan(0);
+            statement.Description.ShouldNotBeNull();
         }
 
         [Fact]
         public async Task DistributedCacheMetadataService_Works()
         {
-            var services = new ServiceCollection();
-
-            var staticClient = new StaticMetadataRepository(DateTime.UtcNow.AddDays(5));
-
             var clients = new List<IMetadataRepository>
             {
-                staticClient
+                new StaticMetadataRepository(DateTime.UtcNow.AddDays(5)),
             };
 
+            var services = new ServiceCollection();
             services.AddDistributedMemoryCache();
             services.AddLogging();
-
             ServiceProvider provider = services.BuildServiceProvider();
 
             IDistributedCache memCache = provider.GetService<IDistributedCache>();
@@ -53,29 +48,23 @@ namespace Fido2
             await service.Initialize();
 
             MetadataTOCPayloadEntry entry = service.GetEntry(Guid.Parse("6d44ba9b-f6ec-2e49-b930-0c8fe920cb73"));
-
-            Assert.True(entry.MetadataStatement.Description == "Yubico Security Key NFC");
-
             var cacheEntry = await memCache.GetStringAsync("DistributedCacheMetadataService:StaticMetadataRepository:Entry:6d44ba9b-f6ec-2e49-b930-0c8fe920cb73");
 
-            Assert.NotNull(cacheEntry);
+            entry.MetadataStatement.Description.ShouldBe("Yubico Security Key NFC");
+            cacheEntry.ShouldNotBeNull();
         }
 
         [Fact]
         public async Task DistributedCacheMetadataService_CacheSuppressionWorks()
         {
-            var services = new ServiceCollection();
-
-            var staticClient = new StaticMetadataRepository(null);
-
             var clients = new List<IMetadataRepository>
             {
-                staticClient
+                new StaticMetadataRepository(null),
             };
 
+            var services = new ServiceCollection();
             services.AddDistributedMemoryCache();
             services.AddLogging();
-
             ServiceProvider provider = services.BuildServiceProvider();
 
             IDistributedCache memCache = provider.GetService<IDistributedCache>();
@@ -88,12 +77,10 @@ namespace Fido2
             await service.Initialize();
 
             MetadataTOCPayloadEntry entry = service.GetEntry(Guid.Parse("6d44ba9b-f6ec-2e49-b930-0c8fe920cb73"));
-
-            Assert.True(entry.MetadataStatement.Description == "Yubico Security Key NFC");
-
             var cacheEntry = await memCache.GetStringAsync("DistributedCacheMetadataService:StaticMetadataRepository:Entry:6d44ba9b-f6ec-2e49-b930-0c8fe920cb73");
 
-            Assert.Null(cacheEntry);
+            entry.MetadataStatement.Description.ShouldBe("Yubico Security Key NFC");
+            cacheEntry.ShouldBeNull();
         }
     }
 }

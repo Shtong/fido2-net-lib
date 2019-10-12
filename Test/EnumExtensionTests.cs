@@ -6,7 +6,7 @@ using Xunit;
 
 namespace fido2_net_lib.Test
 {
-    public class EnumExtensionTest
+    public class EnumExtensionTests
     {
         [Fact]
         public void TestToEnum()

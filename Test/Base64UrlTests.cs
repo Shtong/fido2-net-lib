@@ -6,7 +6,7 @@ using Xunit;
 
 namespace fido2_net_lib.Test
 {
-    public class Base64UrlTest
+    public class Base64UrlTests
     {
     
         [Theory]

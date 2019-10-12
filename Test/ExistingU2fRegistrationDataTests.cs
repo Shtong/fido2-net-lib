@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
 using PeterO.Cbor;
+using Shouldly;
 using Xunit;
 
 namespace Fido2
@@ -64,8 +65,7 @@ namespace Fido2
             AssertionVerificationResult res = 
                 await fido2.MakeAssertionAsync(authResponse, options, publicKey.EncodeToBytes(), 0, null);
 
-            Assert.Equal("ok", res.Status);
-
+            res.Status.ShouldBe("ok");
         }
 
         private static CBORObject CreatePublicKeyFromU2fRegistrationData(byte[] publicKeyData)

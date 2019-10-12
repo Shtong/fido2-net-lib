@@ -163,3 +163,11 @@ dotnet_naming_style.ends_with_async.required_prefix =
 dotnet_naming_style.ends_with_async.required_suffix = Async
 dotnet_naming_style.ends_with_async.word_separator = 
 dotnet_naming_style.ends_with_async.capitalization = pascal_case
+
+### Exceptions ###
+
+# No need for Async suffix in unit tests
+[*Tests.cs]
+dotnet_naming_rule.async_methods_should_be_ends_with_async.severity = suggestion
+dotnet_naming_rule.async_methods_should_be_ends_with_async.symbols = async_methods
+dotnet_naming_rule.async_methods_should_be_ends_with_async.style = pascal_case

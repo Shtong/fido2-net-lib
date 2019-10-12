@@ -5,7 +5,7 @@ using Fido2NetLib.Objects;
 using Shouldly;
 using Xunit;
 
-namespace Fido2.Tests.Objects
+namespace Fido2.Objects
 {
     public class AttestedCredentialDataTests : Fido2TestBase
     {

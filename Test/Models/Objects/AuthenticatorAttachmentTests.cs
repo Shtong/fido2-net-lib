@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 
-namespace Fido2.Tests.Models.Objects
+namespace Fido2.Models.Objects
 {
     public class AuthenticatorAttachmentTests : Fido2TestBase
     {

@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using PeterO.Cbor;
 using Xunit;
 
-namespace Fido2.Tests
+namespace Fido2
 {
     public class Fido2Tests : Fido2TestBase
     {
@@ -44,7 +44,6 @@ namespace Fido2.Tests
 
             using (var sha = SHA256.Create())
             {
-
                 CredentialPublicKey cpk = null;
                 ECDsaCng ecdsa = null;
                 RSACng rsa = null;

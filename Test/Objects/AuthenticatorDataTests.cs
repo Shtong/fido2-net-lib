@@ -5,7 +5,7 @@ using PeterO.Cbor;
 using Shouldly;
 using Xunit;
 
-namespace Fido2.Tests.Objects
+namespace Fido2.Objects
 {
     public class AuthenticatorDataTests : Fido2TestBase
     {

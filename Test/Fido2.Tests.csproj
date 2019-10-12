@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>$(SupportedNonMetaTargetFrameWorks)</TargetFrameworks>
     <IsPackable>false</IsPackable>
+    <RootNamespace>Fido2</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

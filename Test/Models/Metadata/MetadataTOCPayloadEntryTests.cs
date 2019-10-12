@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Fido2NetLib;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 
-namespace Fido2.Tests.Models.Metadata
+namespace Fido2.Models.Metadata
 {
     public class MetadataTOCPayloadEntryTests : Fido2TestBase
     {

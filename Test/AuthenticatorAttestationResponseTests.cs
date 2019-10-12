@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Fido2.Tests
+namespace Fido2
 {
     public class AuthenticatorAttestationResponseTests : Fido2TestBase
     {

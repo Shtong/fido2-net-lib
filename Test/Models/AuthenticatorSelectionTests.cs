@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 
-namespace Fido2.Tests.Models
+namespace Fido2.Models
 {
     public class AuthenticatorSelectionTests : Fido2TestBase
     {

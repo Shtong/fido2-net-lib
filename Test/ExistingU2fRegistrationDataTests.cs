@@ -6,7 +6,7 @@ using Fido2NetLib.Objects;
 using PeterO.Cbor;
 using Xunit;
 
-namespace fido2_net_lib.Test
+namespace Fido2
 {
     public class ExistingU2fRegistrationDataTests
     {

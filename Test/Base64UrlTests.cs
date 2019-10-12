@@ -4,7 +4,7 @@ using System.Text;
 using Fido2NetLib;
 using Xunit;
 
-namespace fido2_net_lib.Test
+namespace Fido2
 {
     public class Base64UrlTests
     {

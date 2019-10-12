@@ -4,7 +4,7 @@ using Fido2NetLib.Objects;
 using Xunit;
 
 
-namespace fido2_net_lib.Test
+namespace Fido2
 {
     public class EnumExtensionTests
     {

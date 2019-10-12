@@ -5,7 +5,7 @@ using Fido2NetLib.Objects;
 using Newtonsoft.Json;
 using PeterO.Cbor;
 
-namespace Fido2.Tests
+namespace Fido2
 {
     /// <summary>
     /// Base class used by all of the project's test classes.

@@ -1,8 +1,8 @@
 ﻿using System;
 using Fido2NetLib;
 using Fido2NetLib.Objects;
+using Shouldly;
 using Xunit;
-
 
 namespace Fido2
 {
@@ -41,11 +41,11 @@ namespace Fido2
 
             if (shouldThrow)
             {
-                Assert.IsType<ArgumentException>(exception);
+                exception.ShouldBeOfType<ArgumentException>();
             }
             else
             {
-                Assert.Null(exception);
+                exception.ShouldBeNull();
             }
         }
 
@@ -64,11 +64,11 @@ namespace Fido2
 
             if (shouldThrow)
             {
-                Assert.IsType<ArgumentException>(exception);
+                exception.ShouldBeOfType<ArgumentException>();
             }
             else
             {
-                Assert.Null(exception);
+                exception.ShouldBeNull();
             }
         }
     }

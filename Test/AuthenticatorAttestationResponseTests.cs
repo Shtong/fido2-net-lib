@@ -52,7 +52,7 @@ namespace Fido2
         }
 
         [Theory]
-        [InlineData("./options1.json", "./json1.json")]
+        [InlineData("./options1.json", "./json1.json")] // TODO : Rename this file pair to differentiate it from the others
         [InlineData("./AttestationNoneOptions.json", "./AttestationNoneResponse.json")]
         [InlineData("./attestationOptionsU2F.json", "./attestationResultsU2F.json")]
         [InlineData("./attestationOptionsPacked.json", "./attestationResultsPacked.json")]

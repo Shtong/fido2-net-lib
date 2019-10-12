@@ -10,6 +10,7 @@ using Fido2NetLib;
 using Fido2NetLib.Objects;
 using Newtonsoft.Json;
 using PeterO.Cbor;
+using Shouldly;
 using Xunit;
 
 namespace Fido2
@@ -19,11 +20,11 @@ namespace Fido2
         [Fact]
         public void TestAuthenticatorDataPa2rsing()
         {
-            var bs = new byte[] { 1, 2, 3 };
-            CBORObject x = CBORObject.NewMap().Add("bytes", bs);
-            var s = x["bytes"].GetByteString();
+            var source = new byte[] { 1, 2, 3 };
+            CBORObject cbor = CBORObject.NewMap().Add("bytes", source);
+            var result = cbor["bytes"].GetByteString();
 
-            Assert.Equal(s, bs);
+            result.ShouldBe(source);
         }
 
         [Theory]

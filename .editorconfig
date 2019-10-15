@@ -164,6 +164,12 @@ dotnet_naming_style.ends_with_async.required_suffix = Async
 dotnet_naming_style.ends_with_async.word_separator = 
 dotnet_naming_style.ends_with_async.capitalization = pascal_case
 
+### FxCop rules ###
+
+# CA1303: Do not pass literals as localized parameters
+dotnet_diagnostic.CA1303.severity = silent
+
+
 ### Exceptions ###
 
 # No need for Async suffix in unit tests

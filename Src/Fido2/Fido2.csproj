@@ -18,6 +18,10 @@
   <!-- References -->
   <ItemGroup>
     <ProjectReference Include="..\Fido2.Models\Fido2.Models.csproj" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
 
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.4" />

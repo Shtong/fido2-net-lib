@@ -57,8 +57,8 @@ namespace Fido2NetLib
 
         public async Task<MetadataStatement> GetMetadataStatement(MetadataTOCPayloadEntry entry)
         {
-            var statementBase64Url = await DownloadStringAsync(entry.Url + "/?token=" + _token);
-            var tocAlg = await GetTocAlg();
+            var statementBase64Url = await DownloadStringAsync(entry.Url + "/?token=" + _token).ConfigureAwait(false);
+            var tocAlg = await GetTocAlg().ConfigureAwait(false);
 
             var statementBytes = Base64Url.Decode(statementBase64Url);
             var statementString = Encoding.UTF8.GetString(statementBytes, 0, statementBytes.Length);
@@ -84,24 +84,24 @@ namespace Fido2NetLib
 
         public async Task<MetadataTOCPayload> GetToc()
         {
-            var rawToc = await GetRawToc();
-            return await DeserializeAndValidateToc(rawToc);
+            var rawToc = await GetRawToc().ConfigureAwait(false);
+            return await DeserializeAndValidateToc(rawToc).ConfigureAwait(false);
         }
 
         protected async Task<string> GetRawToc()
         {
             var url = _tocUrl + "/?token=" + _token;
-            return await DownloadStringAsync(url);
+            return await DownloadStringAsync(url).ConfigureAwait(false);
         }
 
         protected async Task<string> DownloadStringAsync(string url)
         {
-            return await _httpClient.GetStringAsync(url);
+            return await _httpClient.GetStringAsync(url).ConfigureAwait(false);
         }
 
         protected async Task<byte[]> DownloadDataAsync(string url)
         {
-            return await _httpClient.GetByteArrayAsync(url);
+            return await _httpClient.GetByteArrayAsync(url).ConfigureAwait(false);
         }
 
         protected async Task<MetadataTOCPayload> DeserializeAndValidateToc(string toc)
@@ -145,7 +145,7 @@ namespace Fido2NetLib
                     if (element.Certificate.Issuer != element.Certificate.Subject)
                     {
                         var cdp = CryptoUtils.CDPFromCertificateExts(element.Certificate.Extensions);
-                        var crlFile = await DownloadDataAsync(cdp);
+                        var crlFile = await DownloadDataAsync(cdp).ConfigureAwait(false);
                         if (true == CryptoUtils.IsCertInCRL(crlFile, element.Certificate))
                             throw new Fido2VerificationException(string.Format("Cert {0} found in CRL {1}", element.Certificate.Subject, cdp));
                     }

@@ -55,7 +55,7 @@ namespace Fido2NetLib
         {
             if (entry.AaGuid != null)
             {
-                var statement = await repository.GetMetadataStatement(entry);
+                var statement = await repository.GetMetadataStatement(entry).ConfigureAwait(false);
 
                 if (!string.IsNullOrWhiteSpace(statement.AaGuid))
                 {
@@ -69,7 +69,7 @@ namespace Fido2NetLib
 
         protected virtual async Task InitializeClient(IMetadataRepository repository)
         {
-            var toc = await repository.GetToc();
+            var toc = await repository.GetToc().ConfigureAwait(false);
 
             foreach (var entry in toc.Entries)
             {
@@ -78,7 +78,7 @@ namespace Fido2NetLib
                     if (_entries.TryAdd(Guid.Parse(entry.AaGuid), entry))
                     {
                         //Load if it doesn't already exist
-                        await LoadEntryStatement(repository, entry);
+                        await LoadEntryStatement(repository, entry).ConfigureAwait(false);
                     }
                 }
             }
@@ -88,7 +88,7 @@ namespace Fido2NetLib
         {
             foreach (var client in _repositories)
             {
-                await InitializeClient(client);
+                await InitializeClient(client).ConfigureAwait(false);
             }
             _initialized = true;
         }

@@ -45,7 +45,7 @@ namespace Fido2NetLib
         public async Task<MetadataStatement> GetMetadataStatement(MetadataTOCPayloadEntry entry)
         {
             if (_toc == null)
-                await GetToc();
+                await GetToc().ConfigureAwait(false);
 
             if (!string.IsNullOrEmpty(entry.AaGuid) && Guid.TryParse(entry.AaGuid, out Guid parsedAaGuid))
             {
@@ -58,9 +58,8 @@ namespace Fido2NetLib
 
         protected async Task<string> DownloadStringAsync(string url)
         {
-            return await _httpClient.GetStringAsync(url);
+            return await _httpClient.GetStringAsync(url).ConfigureAwait(false);
         }
-
 
         public async Task<MetadataTOCPayload> GetToc()
         {
@@ -252,7 +251,7 @@ namespace Fido2NetLib
             };
             _entries.Add(new Guid(msftWhfbHardwareVbs.AaGuid), msftWhfbHardwareVbs);
 
-            var solostatement = await DownloadStringAsync("https://raw.githubusercontent.com/solokeys/solo/master/metadata/Solo-FIDO2-CTAP2-Authenticator.json");
+            var solostatement = await DownloadStringAsync("https://raw.githubusercontent.com/solokeys/solo/master/metadata/Solo-FIDO2-CTAP2-Authenticator.json").ConfigureAwait(false);
             var soloMetadataStatement = JsonConvert.DeserializeObject<MetadataStatement>(solostatement);
             var soloKeysSolo = new MetadataTOCPayloadEntry
             {

@@ -23,7 +23,7 @@ namespace Fido2NetLib
         public async Task<MetadataStatement> GetMetadataStatement(MetadataTOCPayloadEntry entry)
         {
             if (_toc == null)
-                await GetToc();
+                await GetToc().ConfigureAwait(false);
 
             if (!string.IsNullOrEmpty(entry.AaGuid) && Guid.TryParse(entry.AaGuid, out Guid parsedAaGuid))
             {

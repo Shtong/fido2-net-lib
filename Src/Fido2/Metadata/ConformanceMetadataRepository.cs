@@ -63,8 +63,8 @@ namespace Fido2NetLib
 
         public async Task<MetadataStatement> GetMetadataStatement(MetadataTOCPayloadEntry entry)
         {
-            var statementBase64Url = await DownloadStringAsync(entry.Url);
-            var tocAlg = await GetTocAlg();
+            var statementBase64Url = await DownloadStringAsync(entry.Url).ConfigureAwait(false);
+            var tocAlg = await GetTocAlg().ConfigureAwait(false);
 
             var statementBytes = Base64Url.Decode(statementBase64Url);
             var statementString = Encoding.UTF8.GetString(statementBytes, 0, statementBytes.Length);
@@ -85,8 +85,8 @@ namespace Fido2NetLib
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(_getEndpointsUrl, content);
-            var result = JsonConvert.DeserializeObject<MDSGetEndpointResponse>(await response.Content.ReadAsStringAsync());
+            var response = await _httpClient.PostAsync(_getEndpointsUrl, content).ConfigureAwait(false);
+            var result = JsonConvert.DeserializeObject<MDSGetEndpointResponse>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
             var conformanceEndpoints = new List<string>(result.Result);
 
             var combinedToc = new MetadataTOCPayload
@@ -99,13 +99,13 @@ namespace Fido2NetLib
 
             foreach(var tocUrl in conformanceEndpoints)
             {
-                var rawToc = await DownloadStringAsync(tocUrl);
+                var rawToc = await DownloadStringAsync(tocUrl).ConfigureAwait(false);
 
                 MetadataTOCPayload toc = null;
 
                 try
                 {
-                    toc = await DeserializeAndValidateToc(rawToc);
+                    toc = await DeserializeAndValidateToc(rawToc).ConfigureAwait(false);
                 }
                 catch
                 {
@@ -129,12 +129,12 @@ namespace Fido2NetLib
 
         protected async Task<string> DownloadStringAsync(string url)
         {
-            return await _httpClient.GetStringAsync(url);
+            return await _httpClient.GetStringAsync(url).ConfigureAwait(false);
         }
 
         protected async Task<byte[]> DownloadDataAsync(string url)
         {
-            return await _httpClient.GetByteArrayAsync(url);
+            return await _httpClient.GetByteArrayAsync(url).ConfigureAwait(false);
         }
 
         public async Task<MetadataTOCPayload> DeserializeAndValidateToc(string toc)
@@ -197,7 +197,7 @@ namespace Fido2NetLib
                     if (element.Certificate.Issuer != element.Certificate.Subject)
                     {
                         var cdp = CryptoUtils.CDPFromCertificateExts(element.Certificate.Extensions);
-                        var crlFile = await DownloadDataAsync(cdp);
+                        var crlFile = await DownloadDataAsync(cdp).ConfigureAwait(false);
                         if (true == CryptoUtils.IsCertInCRL(crlFile, element.Certificate))
                             throw new Fido2VerificationException(string.Format("Cert {0} found in CRL {1}", element.Certificate.Subject, cdp));
                     }

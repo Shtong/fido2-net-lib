@@ -72,7 +72,12 @@ namespace Fido2NetLib
             byte[] requestTokenBindingId = null)
         {
             var parsedResponse = AuthenticatorAttestationResponse.Parse(attestationResponse);
-            var success = await parsedResponse.VerifyAsync(origChallenge, _config, isCredentialIdUniqueToUser, _metadataService, requestTokenBindingId);
+            var success = await parsedResponse.VerifyAsync(
+                origChallenge,
+                _config,
+                isCredentialIdUniqueToUser,
+                _metadataService,
+                requestTokenBindingId).ConfigureAwait(false);
 
             // todo: Set Errormessage etc.
             return new CredentialMakeResult 
@@ -118,7 +123,7 @@ namespace Fido2NetLib
                                                           storedPublicKey,
                                                           storedSignatureCounter,
                                                           isUserHandleOwnerOfCredentialIdCallback,
-                                                          requestTokenBindingId);
+                                                          requestTokenBindingId).ConfigureAwait(false);
 
             return result;
         }

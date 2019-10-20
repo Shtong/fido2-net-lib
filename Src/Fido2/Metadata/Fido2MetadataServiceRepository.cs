@@ -55,7 +55,7 @@ namespace Fido2NetLib
             }
         }
 
-        public async Task<MetadataStatement> GetMetadataStatement(MetadataTOCPayloadEntry entry)
+        public async Task<MetadataStatement> GetMetadataStatementAsync(MetadataTOCPayloadEntry entry)
         {
             var statementBase64Url = await DownloadStringAsync(entry.Url + "/?token=" + _token).ConfigureAwait(false);
             var tocAlg = await GetTocAlg().ConfigureAwait(false);
@@ -82,7 +82,7 @@ namespace Fido2NetLib
             return hashA.SequenceEqual(hashB);
         }
 
-        public async Task<MetadataTOCPayload> GetToc()
+        public async Task<MetadataTOCPayload> GetTocAsync()
         {
             var rawToc = await GetRawToc().ConfigureAwait(false);
             return await DeserializeAndValidateToc(rawToc).ConfigureAwait(false);

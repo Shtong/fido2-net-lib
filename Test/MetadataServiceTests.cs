@@ -17,9 +17,9 @@ namespace Fido2
         public async Task ConformanceTestClient()
         {
             var client = new ConformanceMetadataRepository(null, "http://localhost");
-            MetadataTOCPayload toc = await client.GetToc();
+            MetadataTOCPayload toc = await client.GetTocAsync();
 
-            MetadataStatement statement = await client.GetMetadataStatement(toc.Entries[toc.Entries.Length - 1]);
+            MetadataStatement statement = await client.GetMetadataStatementAsync(toc.Entries[toc.Entries.Length - 1]);
 
             toc.Entries.Length.ShouldBeGreaterThan(0);
             statement.Description.ShouldNotBeNull();

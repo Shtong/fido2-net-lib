@@ -20,10 +20,10 @@ namespace Fido2NetLib
             _entries = new Dictionary<Guid, MetadataTOCPayloadEntry>();
         }
 
-        public async Task<MetadataStatement> GetMetadataStatement(MetadataTOCPayloadEntry entry)
+        public async Task<MetadataStatement> GetMetadataStatementAsync(MetadataTOCPayloadEntry entry)
         {
             if (_toc == null)
-                await GetToc().ConfigureAwait(false);
+                await GetTocAsync().ConfigureAwait(false);
 
             if (!string.IsNullOrEmpty(entry.AaGuid) && Guid.TryParse(entry.AaGuid, out Guid parsedAaGuid))
             {
@@ -34,7 +34,7 @@ namespace Fido2NetLib
             return null;
         }
 
-        public Task<MetadataTOCPayload> GetToc()
+        public Task<MetadataTOCPayload> GetTocAsync()
         {
             if (Directory.Exists(_path))
             {

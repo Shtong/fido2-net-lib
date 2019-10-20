@@ -90,7 +90,7 @@ namespace Fido2NetLib
 
                     try
                     {
-                        var statement = await repository.GetMetadataStatement(entry);
+                        var statement = await repository.GetMetadataStatementAsync(entry);
 
                         if (!string.IsNullOrWhiteSpace(statement.AaGuid))
                         {
@@ -157,7 +157,7 @@ namespace Fido2NetLib
 
                 try
                 {
-                    toc = await repository.GetToc();
+                    toc = await repository.GetTocAsync();
                 }
                 catch(Exception ex)
                 {

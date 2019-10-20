@@ -42,10 +42,10 @@ namespace Fido2NetLib
             _cacheUntil = cacheUntil;
         }
 
-        public async Task<MetadataStatement> GetMetadataStatement(MetadataTOCPayloadEntry entry)
+        public async Task<MetadataStatement> GetMetadataStatementAsync(MetadataTOCPayloadEntry entry)
         {
             if (_toc == null)
-                await GetToc().ConfigureAwait(false);
+                await GetTocAsync().ConfigureAwait(false);
 
             if (!string.IsNullOrEmpty(entry.AaGuid) && Guid.TryParse(entry.AaGuid, out Guid parsedAaGuid))
             {
@@ -61,7 +61,7 @@ namespace Fido2NetLib
             return await _httpClient.GetStringAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<MetadataTOCPayload> GetToc()
+        public async Task<MetadataTOCPayload> GetTocAsync()
         {
             var yubico = new MetadataTOCPayloadEntry
             {

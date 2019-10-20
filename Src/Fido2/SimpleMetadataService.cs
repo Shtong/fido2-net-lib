@@ -55,7 +55,7 @@ namespace Fido2NetLib
         {
             if (entry.AaGuid != null)
             {
-                var statement = await repository.GetMetadataStatement(entry).ConfigureAwait(false);
+                var statement = await repository.GetMetadataStatementAsync(entry).ConfigureAwait(false);
 
                 if (!string.IsNullOrWhiteSpace(statement.AaGuid))
                 {
@@ -69,7 +69,7 @@ namespace Fido2NetLib
 
         protected virtual async Task InitializeClient(IMetadataRepository repository)
         {
-            var toc = await repository.GetToc().ConfigureAwait(false);
+            var toc = await repository.GetTocAsync().ConfigureAwait(false);
 
             foreach (var entry in toc.Entries)
             {

@@ -65,6 +65,11 @@ namespace Fido2NetLib
 
         public async Task<AttestationVerificationSuccess> VerifyAsync(CredentialCreateOptions originalOptions, Fido2Configuration config, IsCredentialIdUniqueToUserAsyncDelegate isCredentialIdUniqueToUser, IMetadataService metadataService, byte[] requestTokenBindingId)
         {
+            if (config == null)
+                throw new ArgumentNullException(nameof(config));
+            if (originalOptions == null)
+                throw new ArgumentNullException(nameof(originalOptions));
+
             BaseVerify(config.Origin, originalOptions.Challenge, requestTokenBindingId);
             // verify challenge is same as we expected
             // verify origin

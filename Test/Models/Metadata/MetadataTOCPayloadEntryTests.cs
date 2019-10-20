@@ -21,9 +21,13 @@ namespace Fido2.Models.Metadata
                     AuthenticatorVersion = 1,
                     AssertionScheme = "abc123",
                     AuthenticationAlgorithm = 1,
-                    Upv = new Version[] 
+                    Upv = new[] 
                     {
-                        new Version("1.0.0.0") 
+                        new UafVersion
+                        {
+                            Major = 1,
+                            Minor = 0,
+                        },
                     },
                     AttestationTypes = new ushort[] { 1 },
                     UserVerificationDetails = Array.Empty<VerificationMethodDescriptor[]>(),
